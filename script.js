@@ -28,9 +28,27 @@ function aplicarFiltros() {
     const combinaComBusca = nome.includes(termo);
     const combinaComFiltro = activeFilter === "all" || tags.includes(activeFilter);
 
-    card.style.display = (combinaComBusca && combinaComFiltro) ? "block" : "none";
+    if (combinaComBusca && combinaComFiltro) {
+      card.style.display = "block";
+      card.removeAttribute("data-aos");
+      card.classList.add("aos-animate");
+    } else {
+      card.style.display = "none";
+    }
   });
 }
+
+searchInput.addEventListener("blur", () => {
+  if (searchInput.value.trim() === "") {
+    cards.forEach(card => {
+      card.setAttribute("data-aos", "fade-up"); 
+      card.classList.remove("aos-animate");
+    });
+
+    AOS.refresh(); // Garante que o AOS reconheça de novo os atributos
+  }
+});
+
 
 // Modal: abrir
 function abrirModal() {
@@ -53,3 +71,4 @@ botoes.forEach(botao => {
 btnToggleFiltros.addEventListener("click", () => {
   filtros.classList.toggle("hidden");
 });
+
